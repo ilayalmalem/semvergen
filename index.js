@@ -35,11 +35,61 @@ if (args.includes('build') && args.includes('current')) {
     semver.seedVersions();
     var newVer = semver.getNextVersion(config.version, 'MINOR_PATCH');
     console.log('Commiting your work to github.');
-    exec('git add .');
-    exec(`git commit -m "${newVer}`);
-    exec('git push');
-    console.log('Updating npm version.');
-    exec(`npm version ${newVer}`);
+    exec('git add .', (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+    exec(`git commit -m "${newVer}`, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+    exec('git push origin master', (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+    console.log('Updating npm version.', (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+    exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
     exec(`npm publish`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
