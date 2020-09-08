@@ -63,32 +63,32 @@ if(args.includes('build') && args.includes('current')) {
             if (stderr) {
                 return;
             }
-            exec('git push origin master', (error, stdout, stderr) => {
-                if (error) {
-                    return;
-                }
-                if (stderr) {
-                    return;
-                }
-            })
-        
-            exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-                if (error) {
-                    return;
-                }
-                if (stderr) {
-                    return;
-                }
-            })
-            exec(`npm publish`, (error, stdout, stderr) => {
-                if (error) {
-                    return;
-                }
-                if (stderr) {
-                    return;
-                }
-            })
         })
-        
+        exec('git push origin master', (error, stdout, stderr) => {
+            if (error) {
+                return;
+            }
+            if (stderr) {
+                return;
+            }
+        })
+    
+        exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+            if (error) {
+                return;
+            }
+            if (stderr) {
+                return;
+            }
+        })
+        exec(`npm publish`, (error, stdout, stderr) => {
+            if (error) {
+                return;
+            }
+            if (stderr) {
+                return;
+            }
+        })
+    })
     });
 }
