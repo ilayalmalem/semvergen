@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 const config = require('./package.json')
 const { exec } = require("child_process");
+const readline = require("readline");
 
 
 declare interface String {
@@ -54,17 +55,26 @@ if(args.includes('build') && args.includes('current')) {
         }
         console.log(`stdout: ${stdout}`);
     })
-    exec(`git commit -m "${newVer}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    })
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.question("Choose commit message.", function(message) {
+        exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.log(`${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        })
+    });
+
     exec('git push origin master', (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
