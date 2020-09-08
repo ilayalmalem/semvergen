@@ -33,7 +33,8 @@ var semver;
 const [, , ...args] = process.argv;
 if (args.includes('build') && args.includes('current')) {
     semver.seedVersions();
-    exec(`git add .;git commit -m "${semver.getNextVersion(config.version, 'MINOR_PATCH')}";gp;npm publish;`, (error, stdout, stderr) => {
+    var newVer = semver.getNextVersion(config.version, 'MINOR_PATCH');
+    exec(`git add .;git commit -m "${newVer}";gp;npm publish ${newVer};`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
