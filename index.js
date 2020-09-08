@@ -45,7 +45,6 @@ if (args.includes('build') && args.includes('current')) {
             console.log(`${stderr}`);
             return;
         }
-        console.log(`stdout: ${stdout}`);
     });
     inquirer
         .prompt([
