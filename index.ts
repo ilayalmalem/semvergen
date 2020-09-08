@@ -46,11 +46,9 @@ if(args.includes('build') && args.includes('current')) {
     console.log('Commiting your work to github.')
     exec('git add .', (error, stdout, stderr) => {
         if (error) {
-            console.log(`error: ${error.message}`);
             return;
         }
         if (stderr) {
-            console.log(`${stderr}`);
             return;
         }
     })
@@ -112,6 +110,4 @@ if(args.includes('build') && args.includes('current')) {
             })
           
         });
-
-    console.log(semver.getNextVersion(config.version,'MINOR_PATCH'))
 }
