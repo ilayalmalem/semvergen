@@ -68,17 +68,7 @@ if (args.includes('build') && args.includes('current')) {
         }
         console.log(`stdout: ${stdout}`);
     });
-    console.log('Updating npm version.', (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    });
+    console.log('Updating npm version.');
     exec(`npm version ${newVer}`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
