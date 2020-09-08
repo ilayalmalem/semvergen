@@ -46,7 +46,7 @@ if (args.includes('build') && args.includes('current')) {
         }
         console.log(`stdout: ${stdout}`);
     });
-    exec(`git commit -m "${newVer}`, (error, stdout, stderr) => {
+    exec(`git commit -m "${newVer}"`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
