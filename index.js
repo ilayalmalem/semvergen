@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 const config = require('./package.json');
 const { exec } = require("child_process");
-const readline = require("readline");
+const inquirer = require('inquirer');
 String.prototype.replaceAt = function (index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
 };
@@ -47,11 +47,15 @@ if (args.includes('build') && args.includes('current')) {
         }
         console.log(`stdout: ${stdout}`);
     });
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    rl.question("Choose commit message.", function (message) {
+    inquirer
+        .prompt([
+        {
+            type: 'input',
+            name: 'message',
+            message: 'Type commit message',
+        },
+    ])
+        .then(message => {
         exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
@@ -62,41 +66,41 @@ if (args.includes('build') && args.includes('current')) {
                 return;
             }
             console.log(`stdout: ${stdout}`);
+            exec('git push origin master', (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    console.log(`${stderr}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+            });
+            console.log('Updating npm version.');
+            exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    console.log(`${stderr}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+            });
+            exec(`npm publish`, (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    console.log(`${stderr}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+            });
         });
-    });
-    exec('git push origin master', (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    });
-    console.log('Updating npm version.');
-    exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    });
-    exec(`npm publish`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
     });
     console.log(semver.getNextVersion(config.version, 'MINOR_PATCH'));
 }
