@@ -45,55 +45,18 @@ if (args.includes("build") && args.includes("current")) {
   semver.seedVersions();
   var newVer = semver.getNextVersion(config.version, "MINOR_PATCH");
   console.log("Commiting your work to github.");
+
+
   exec("git add .", (error, stdout, stderr) => {
-    if (error) {
-      return;
-    }
-    if (stderr) {
-      return;
-    }
     inquirer
       .prompt([
         { type: "input", name: "message", message: "Type commit message" },
       ])
       .then((message) => {
-        exec(
-          `git commit -m "${newVer}" -m "${message}"`,
-          (error, stdout, stderr) => {
-            if (error) {
-              return;
-            }
-            if (stderr) {
-              return;
-            }
-            exec("git push origin master", (error, stdout, stderr) => {
-              if (error) {
-                return;
-              }
-              if (stderr) {
-                return;
-              }
-            });
-          }
-        );
+        exec(`git commit -m ${message.message}`, (error, stdout, stderr) => {
+            exec("git push origin master")
+            console.log('Publishing to NPM.')
+        })
       })
-      .then(() => {
-        exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-          if (error) {
-            return;
-          }
-          if (stderr) {
-            return;
-          }
-        });
-        exec(`npm publish`, (error, stdout, stderr) => {
-          if (error) {
-            return;
-          }
-          if (stderr) {
-            return;
-          }
-        });
-      });
   });
 }
