@@ -53,9 +53,13 @@ if (args.includes("build") && args.includes("current")) {
         { type: "input", name: "message", message: "Type commit message" },
       ])
       .then((message) => {
-        exec(`git commit -m ${message.message}`, (error, stdout, stderr) => {
-            exec("git push origin master")
-            console.log('Publishing to NPM.')
+        exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
+            exec("git push origin master", (error, stdout, stderr) => {
+                console.log('Publishing to NPM.')
+                exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                    exec('npm publish')
+                })
+            })
         })
       })
   });
