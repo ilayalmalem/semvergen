@@ -41,7 +41,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
@@ -52,7 +52,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
@@ -63,7 +63,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
@@ -74,7 +74,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
@@ -85,7 +85,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
@@ -96,7 +96,7 @@ if (args.includes('build') && args.includes('current')) {
             return;
         }
         if (stderr) {
-            console.log(`stderr: ${stderr}`);
+            console.log(`${stderr}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
