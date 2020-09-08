@@ -55,23 +55,24 @@ if(args.includes('build') && args.includes('current')) {
 
     inquirer.prompt([{type: 'input',name: 'message',message: 'Type commit message',},])
     .then(message => {
-        exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
+        exec(`git commit -m "${newVer}" -m "${message}"`, (error, stdout, stderr) => {
             if (error) {
                 return;
             }
             if (stderr) {
                 return;
             }
+            exec('git push origin master', (error, stdout, stderr) => {
+                if (error) {
+                    return;
+                }
+                if (stderr) {
+                    return;
+                }
+            })
         })
-    }).then(() => {
-        exec('git push origin master', (error, stdout, stderr) => {
-            if (error) {
-                return;
-            }
-            if (stderr) {
-                return;
-            }
-        })
+    })
+    .then(() => {
     
         exec(`npm version ${newVer}`, (error, stdout, stderr) => {
             if (error) {
