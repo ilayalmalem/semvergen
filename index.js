@@ -67,37 +67,35 @@ if (args.includes("publish")) {
     var supplied = false;
     switch (args[1]) {
         case 'patch':
-            supplied = true;
             var newVer = semver.getNextVersion(config.version, 'PATCH');
             break;
         case 'minor':
-            supplied = true;
             var newVer = semver.getNextVersion(config.version, 'MINOR');
             break;
         case 'major':
-            supplied = true;
             var newVer = semver.getNextVersion(config.version, 'MAJOR');
             break;
+        default:
+            console.error('Supply a release type. patch | minor | major');
+            process.exit(1);
     }
-    if (supplied) {
-        console.log(newVer);
-        console.log("Commiting your work to github.");
-        exec("git add .", (error, stdout, stderr) => {
-            inquirer
-                .prompt([
-                { type: "input", name: "message", message: "Type commit message" },
-            ])
-                .then((message) => {
-                setTimeout(() => { }, 1);
-                exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                    exec("git push", (error, stdout, stderr) => {
-                        console.log("Publishing to NPM....");
-                        exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-                            exec("npm publish");
-                        });
+    console.log(newVer);
+    console.log("Commiting your work to github.");
+    exec("git add .", (error, stdout, stderr) => {
+        inquirer
+            .prompt([
+            { type: "input", name: "message", message: "Type commit message" },
+        ])
+            .then((message) => {
+            setTimeout(() => { }, 1);
+            exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
+                exec("git push", (error, stdout, stderr) => {
+                    console.log("Publishing to NPM....");
+                    exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                        exec("npm publish");
                     });
                 });
             });
         });
-    }
+    });
 }
