@@ -100,13 +100,15 @@ if (args.includes("publish")) {
                   { type: "input", name: "message", message: "Type commit message" },
                 ])
                 .then((message) => {
-                  exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                      exec("git push", (error, stdout, stderr) => {
-                          console.log('Publishing to NPM....')
-                          exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-                              exec('npm publish')
-                          })
-                      })
+                  sleep(50).then(() => {
+                    exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
+                        exec("git push", (error, stdout, stderr) => {
+                            console.log('Publishing to NPM....')
+                            exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                                exec('npm publish')
+                            })
+                        })
+                    })
                   })
                 })
             });
