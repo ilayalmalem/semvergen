@@ -70,7 +70,7 @@ if (args.includes("publish") && args.includes("patch")) {
         ])
             .then((message) => {
             exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                exec("git push origin master", (error, stdout, stderr) => {
+                exec("git push", (error, stdout, stderr) => {
                     console.log('Publishing to NPM....');
                     exec(`npm version ${newVer}`, (error, stdout, stderr) => {
                         exec('npm publish');
