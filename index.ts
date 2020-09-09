@@ -118,7 +118,7 @@ if (args.includes("publish")) {
             { type: "input", name: "message", message: "Type commit message" },
           ])
           .then((message) => {
-            console.log(message.message)
+            setTimeout(() => {},15)
             exec(
               `git commit -m ${message.message} -m ${newVer}`,
               (error, stdout, stderr) => {
