@@ -88,6 +88,7 @@ if (args.includes("publish")) {
                 .then(type => {
                 var newVer = semver.getNextVersion(config.version, type.type.toUpperCase());
                 console.log("Commiting your work to github.");
+                setTimeout(() => { }, 15);
                 exec("git add .", (error, stdout, stderr) => {
                     inquirer
                         .prompt([
