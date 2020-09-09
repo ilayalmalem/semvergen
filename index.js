@@ -86,6 +86,7 @@ if (args.includes("publish")) {
                 },
             ])
                 .then(type => {
+                console.log(type.type.toUpperCase());
                 var newVer = semver.getNextVersion(config.version, type.type.toUpperCase());
                 console.log("Commiting your work to github.");
                 setTimeout(() => { console.log(`Publishing ${newVer}`); }, 15);
