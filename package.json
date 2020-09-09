@@ -1,6 +1,6 @@
 {
   "name": "tssemver",
-  "version": "1.1.31",
+  "version": "1.2.0",
   "description": "Blah",
   "main": "index.js",
   "scripts": {
