@@ -2,6 +2,9 @@
 const config = require("./package.json");
 const { exec } = require("child_process");
 const inquirer = require("inquirer");
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 String.prototype.replaceAt = function (index, replacement) {
     return (this.substr(0, index) +
         replacement +
@@ -88,7 +91,7 @@ if (args.includes("publish")) {
                 .then(type => {
                 var newVer = semver.getNextVersion(config.version, type.type.toUpperCase());
                 console.log("Commiting your work to github.");
-                setTimeout(() => {
+                sleep(100).then(() => {
                     exec("git add .", (error, stdout, stderr) => {
                         inquirer
                             .prompt([
@@ -105,7 +108,7 @@ if (args.includes("publish")) {
                             });
                         });
                     });
-                }, 30);
+                });
             });
             break;
     }

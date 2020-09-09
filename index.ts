@@ -6,6 +6,9 @@ const inquirer = require("inquirer");
 declare interface String {
   replaceAt(index, replacement): string;
 }
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 String.prototype.replaceAt = function(index, replacement) {
   return (
@@ -90,7 +93,7 @@ if (args.includes("publish")) {
         .then(type => {
           var newVer = semver.getNextVersion(config.version,type.type.toUpperCase())
           console.log("Commiting your work to github.");
-          setTimeout(() => {
+          sleep(100).then(() => {
             exec("git add .", (error, stdout, stderr) => {
               inquirer
                 .prompt([
@@ -107,7 +110,7 @@ if (args.includes("publish")) {
                   })
                 })
             });
-          },30)
+          });
         })
       break;
     }
