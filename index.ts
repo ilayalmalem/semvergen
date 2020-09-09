@@ -38,8 +38,8 @@ namespace semver {
     var buildNumber = version.split('.');
 
     if (method === "PATCH") {var patch = parseInt(buildNumber[2]);return `${buildNumber[0]}.${buildNumber[1]}.${++patch}`}
-    else if (method === "MINOR") {var minor = parseInt(buildNumber[1]);return `${buildNumber[0]}.${++minor}.${buildNumber[2]}`}
-    else if (method === "MAJOR") {var major = parseInt(buildNumber[0]);return `${++major}.${buildNumber[1]}.${buildNumber[2]}`}
+    else if (method === "MINOR") {var minor = parseInt(buildNumber[1]);return `${buildNumber[0]}.${++minor}.${0}`}
+    else if (method === "MAJOR") {var major = parseInt(buildNumber[0]);return `${++major}.${0}.${0}`}
   }
 }
 
@@ -78,7 +78,6 @@ if (args.includes("publish")) {
       var newVer = semver.getNextVersion(config.version,'MAJOR')
       break;
     default:
-
       inquirer
         .prompt([
             {
@@ -111,6 +110,7 @@ if (args.includes("publish")) {
       break;
     }
     if(supplied) {
+      console.log(newVer)
       console.log("Commiting your work to github.");
       exec("git add .", (error, stdout, stderr) => {
         inquirer
