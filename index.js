@@ -78,41 +78,6 @@ if (args.includes("publish")) {
             supplied = true;
             var newVer = semver.getNextVersion(config.version, 'MAJOR');
             break;
-        default:
-            inquirer
-                .prompt([
-                {
-                    type: 'list',
-                    name: 'type',
-                    message: 'Select version type:',
-                    choices: ['Patch', 'Minor', 'Major'],
-                },
-            ])
-                .then(type => {
-                var newVer = semver.getNextVersion(config.version, type.type.toUpperCase());
-                console.log("Commiting your work to github.");
-                sleep(100).then(() => {
-                    exec("git add .", (error, stdout, stderr) => {
-                        inquirer
-                            .prompt([
-                            { type: "input", name: "message", message: "Type commit message" },
-                        ])
-                            .then((message) => {
-                            sleep(50).then(() => {
-                                exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                                    exec("git push", (error, stdout, stderr) => {
-                                        console.log('Publishing to NPM....');
-                                        exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-                                            exec('npm publish');
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-            break;
     }
     if (supplied) {
         console.log(newVer);
