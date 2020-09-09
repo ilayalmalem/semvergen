@@ -28,15 +28,40 @@ var semver;
     semver.seedVersions = seedVersions;
     function getNextVersion(version, method) {
         var v = semver.versions.indexOf(version);
-        if (method === "MINOR_PATCH")
-            return semver.versions[++v];
+        var buildNumber = version.split('.');
+        if (method === "PATCH") {
+            var patch = parseInt(buildNumber[2]);
+            return `${buildNumber[0]}.${buildNumber[1]}.${++patch}`;
+        }
+        else if (method === "MINOR") {
+            var minor = parseInt(buildNumber[1]);
+            return `${buildNumber[0]}.${++minor}.${buildNumber[2]}`;
+        }
+        else if (method === "MAJOR") {
+            var major = parseInt(buildNumber[0]);
+            return `${++major}.${buildNumber[1]}.${buildNumber[2]}`;
+        }
     }
     semver.getNextVersion = getNextVersion;
 })(semver || (semver = {}));
 const [, , ...args] = process.argv;
-if (args.includes("build") && args.includes("current")) {
+if (args.includes('current')) {
+    var version = config.version;
+    console.log(`
+  ╔═════════════════╤═════════╗
+  ║ Current version │ v${version} ║
+  ║─────────────────┼─────────║
+  ║ Next Patch      │ v${semver.getNextVersion(version, 'PATCH')} ║          
+  ║─────────────────┼─────────║       
+  ║ Next Minor      │ v${semver.getNextVersion(version, 'MINOR')} ║
+  ║─────────────────┼─────────║
+  ║ Next major      │ v${semver.getNextVersion(version, 'MAJOR')} ║
+  ╚═════════════════╧═════════╝
+  `);
+}
+if (args.includes("publish") && args.includes("patch")) {
     semver.seedVersions();
-    var newVer = semver.getNextVersion(config.version, "MINOR_PATCH");
+    var newVer = semver.getNextVersion(config.version, "PATCH");
     console.log("Commiting your work to github.");
     exec("git add .", (error, stdout, stderr) => {
         inquirer
@@ -46,7 +71,7 @@ if (args.includes("build") && args.includes("current")) {
             .then((message) => {
             exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
                 exec("git push origin master", (error, stdout, stderr) => {
-                    console.log('Publishing to NPM.');
+                    console.log('Publishing to NPM....');
                     exec(`npm version ${newVer}`, (error, stdout, stderr) => {
                         exec('npm publish');
                     });
