@@ -88,26 +88,26 @@ if (args.includes("publish")) {
             },
         ])
         .then(type => {
-          console.log(type.type.toUpperCase())
           var newVer = semver.getNextVersion(config.version,type.type.toUpperCase())
           console.log("Commiting your work to github.");
-          setTimeout(() => {console.log(`Publishing ${newVer}`)},15)
-          exec("git add .", (error, stdout, stderr) => {
-            inquirer
-              .prompt([
-                { type: "input", name: "message", message: "Type commit message" },
-              ])
-              .then((message) => {
-                exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                    exec("git push", (error, stdout, stderr) => {
-                        console.log('Publishing to NPM....')
-                        exec(`npm version ${newVer}`, (error, stdout, stderr) => {
-                            exec('npm publish')
-                        })
-                    })
+          setTimeout(() => {
+            exec("git add .", (error, stdout, stderr) => {
+              inquirer
+                .prompt([
+                  { type: "input", name: "message", message: "Type commit message" },
+                ])
+                .then((message) => {
+                  exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
+                      exec("git push", (error, stdout, stderr) => {
+                          console.log('Publishing to NPM....')
+                          exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                              exec('npm publish')
+                          })
+                      })
+                  })
                 })
-              })
-          });
+            });
+          },30)
         })
       break;
     }
