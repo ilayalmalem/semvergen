@@ -59,9 +59,21 @@ if (args.includes('current')) {
   ╚═════════════════╧═════════╝
   `);
 }
-if (args.includes("publish") && args.includes("patch")) {
+if (args.includes("publish")) {
     semver.seedVersions();
-    var newVer = semver.getNextVersion(config.version, "PATCH");
+    switch (args[1]) {
+        case 'patch':
+            var newVer = semver.getNextVersion(config.version, 'PATCH');
+            break;
+        case 'minor':
+            var newVer = semver.getNextVersion(config.version, 'MINOR');
+            break;
+        case 'major':
+            var newVer = semver.getNextVersion(config.version, 'MAJOR');
+            break;
+        default:
+            break;
+    }
     console.log("Commiting your work to github.");
     exec("git add .", (error, stdout, stderr) => {
         inquirer
