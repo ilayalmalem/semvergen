@@ -1,9 +1,9 @@
 #! /usr/bin/env node
-const config = require("./package.json");
-const { exec } = require("child_process");
-const inquirer = require("inquirer");
+var config = require("./package.json");
+var exec = require("child_process").exec;
+var inquirer = require("inquirer");
 function sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
+    return new Promise(function (resolve) { return setTimeout(resolve, time); });
 }
 String.prototype.replaceAt = function (index, replacement) {
     return (this.substr(0, index) +
@@ -14,7 +14,7 @@ var semver;
 (function (semver) {
     semver.versions = [];
     function seedVersions() {
-        for (let index = 0; index <= 100; index++) {
+        for (var index = 0; index <= 100; index++) {
             var base = "1.0.0";
             var buildNumber = base.split(".");
             var build = {
@@ -22,9 +22,9 @@ var semver;
                 MID: buildNumber[1],
                 MINOR: buildNumber[2],
             };
-            let v = base.lastIndexOf("0");
-            base = base.replaceAt(v, `${index}`);
-            semver.versions.push(`${base}`);
+            var v = base.lastIndexOf("0");
+            base = base.replaceAt(v, "" + index);
+            semver.versions.push("" + base);
         }
         return semver.versions;
     }
@@ -34,33 +34,23 @@ var semver;
         var buildNumber = version.split('.');
         if (method === "PATCH") {
             var patch = parseInt(buildNumber[2]);
-            return `${buildNumber[0]}.${buildNumber[1]}.${++patch}`;
+            return buildNumber[0] + "." + buildNumber[1] + "." + ++patch;
         }
         else if (method === "MINOR") {
             var minor = parseInt(buildNumber[1]);
-            return `${buildNumber[0]}.${++minor}.${0}`;
+            return buildNumber[0] + "." + ++minor + "." + 0;
         }
         else if (method === "MAJOR") {
             var major = parseInt(buildNumber[0]);
-            return `${++major}.${0}.${0}`;
+            return ++major + "." + 0 + "." + 0;
         }
     }
     semver.getNextVersion = getNextVersion;
 })(semver || (semver = {}));
-const [, , ...args] = process.argv;
+var _a = process.argv, args = _a.slice(2);
 if (args.includes('current')) {
     var version = config.version;
-    console.log(`
-  ╔═════════════════╤═════════╗
-  ║ Current version │ v${version} ║
-  ║─────────────────┼─────────║
-  ║ Next Patch      │ v${semver.getNextVersion(version, 'PATCH')} ║          
-  ║─────────────────┼─────────║       
-  ║ Next Minor      │ v${semver.getNextVersion(version, 'MINOR')} ║
-  ║─────────────────┼─────────║
-  ║ Next major      │ v${semver.getNextVersion(version, 'MAJOR')} ║
-  ╚═════════════════╧═════════╝
-  `);
+    console.log("\n  \u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2564\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n  \u2551 Current version \u2502 v" + version + " \u2551\n  \u2551\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2551\n  \u2551 Next Patch      \u2502 v" + semver.getNextVersion(version, 'PATCH') + " \u2551          \n  \u2551\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2551       \n  \u2551 Next Minor      \u2502 v" + semver.getNextVersion(version, 'MINOR') + " \u2551\n  \u2551\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2551\n  \u2551 Next major      \u2502 v" + semver.getNextVersion(version, 'MAJOR') + " \u2551\n  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2567\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D\n  ");
 }
 if (args.includes("publish")) {
     semver.seedVersions();
@@ -81,17 +71,17 @@ if (args.includes("publish")) {
     }
     console.log(newVer);
     console.log("Commiting your work to github.");
-    exec("git add .", (error, stdout, stderr) => {
+    exec("git add .", function (error, stdout, stderr) {
         inquirer
             .prompt([
             { type: "input", name: "message", message: "Type commit message" },
         ])
-            .then((message) => {
-            setTimeout(() => { }, 1);
-            exec(`git commit -m ${message.message} -m ${newVer}`, (error, stdout, stderr) => {
-                exec("git push", (error, stdout, stderr) => {
+            .then(function (message) {
+            setTimeout(function () { }, 1);
+            exec("git commit -m " + message.message + " -m " + newVer, function (error, stdout, stderr) {
+                exec("git push", function (error, stdout, stderr) {
                     console.log("Publishing to NPM....");
-                    exec(`npm version ${newVer}`, (error, stdout, stderr) => {
+                    exec("npm version " + newVer, function (error, stdout, stderr) {
                         exec("npm publish");
                     });
                 });

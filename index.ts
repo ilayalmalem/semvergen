@@ -63,7 +63,6 @@ if(args.includes('current')) {
   `)
 }
 
-
 if (args.includes("publish")) {
   semver.seedVersions();
   var supplied = false;

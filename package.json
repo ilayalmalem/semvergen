@@ -17,5 +17,7 @@
   "bin": {
     "semver": "index.js"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  }
 }
